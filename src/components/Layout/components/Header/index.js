@@ -1,12 +1,38 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircleXmark, faSpinner, faSearch } from '@fortawesome/free-solid-svg-icons';
+import { faCircleXmark, faSpinner, faSearch, faAdd, faEllipsisVertical, faLanguage, faQuestionCircle, faKeyboard } from '@fortawesome/free-solid-svg-icons';
+import Tippy from "@tippyjs/react";
+import { useState } from "react";
 
+import Button from "~/components/Button";
 import classNames from "classnames/bind";
 import styles from './Header.module.scss'
+import { Wrapper as PopperWrapper } from "~/components/Popper";
+import AccountItems from "~/components/AccountItems";
+import Menu from "~/components/Popper/Menu";
 
 
 const cx = classNames.bind(styles)
+
+const MENU_ITEMS = [
+    {
+        icon: <FontAwesomeIcon icon={faLanguage} />,
+        title: 'Tiếng Việt'
+    },
+    {
+        icon: <FontAwesomeIcon icon={faQuestionCircle} />,
+        title: 'Phản hồi và trợ giúp',
+        to: '/feedback'
+    },
+    {
+        icon: <FontAwesomeIcon icon={faKeyboard} />,
+        title: 'Phím tắt trên bàn phím'
+    },
+]
+
 function Header() {
+    const [searchResult, SetSearchResult] = useState([1])
+
+
     return <header className={cx('wrapper')}>
         <div className={cx('inner')}>
             {/* Logo */}
@@ -21,18 +47,48 @@ function Header() {
                 <path fill="black" d="M91.58 28.887a3.94 3.94 0 0 1-3.94-3.945 3.94 3.94 0 1 1 7.882 0c0 2.18-1.77 3.945-3.942 3.945Zm0-12.058c-4.477 0-8.106 3.631-8.106 8.113 0 4.482 3.629 8.113 8.106 8.113 4.478 0 8.106-3.631 8.106-8.113 0-4.482-3.628-8.113-8.106-8.113Z"></path>
             </svg>
 
-            <div className={cx('search')}>
-                <input placeholder="Tìm kiếm" spellCheck={false} />
-                <button>
-                    <FontAwesomeIcon className={cx('clear')} icon={faCircleXmark} />
-                </button>
-                <FontAwesomeIcon className={cx('loading')} icon={faSpinner} />
-                <button className={cx('search-btn')}>
-                    <FontAwesomeIcon icon={faSearch} />
-                </button>
-            </div>
+            <Tippy
+                interactive
+                visible={searchResult.length > 0}
+                render={attrs => (
+                    <div className={cx('search-result')} tabIndex="-1" {...attrs}>
+                        <PopperWrapper>
+                            <h4 className={cx('search-title')}>Tài khoản</h4>
+                            <AccountItems />
+                            <AccountItems />
+                            <AccountItems />
+                            <AccountItems />
 
-            
+                        </PopperWrapper>
+                    </div>
+                )}
+            >
+                <div className={cx('search')}>
+                    <input placeholder="Tìm kiếm" spellCheck={false} />
+
+                    <button>
+                        <FontAwesomeIcon className={cx('clear')} icon={faCircleXmark} />
+                    </button>
+
+                    <FontAwesomeIcon className={cx('loading')} icon={faSpinner} />
+
+                    <button className={cx('search-btn')}>
+                        <FontAwesomeIcon icon={faSearch} />
+                    </button>
+                </div>
+            </Tippy>
+
+
+            <div className={cx('action')}>
+                <Button text leftIcon={<FontAwesomeIcon icon={faAdd} />}>Tải lên</Button>
+                <Button primary>Đăng nhập</Button>
+
+                <Menu items={MENU_ITEMS}>
+                    <button className={cx('more-btn')}>
+                        <FontAwesomeIcon icon={faEllipsisVertical} />
+                    </button>
+                </Menu>
+            </div>
         </div>
     </header>
 }
