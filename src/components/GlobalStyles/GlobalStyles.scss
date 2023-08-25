@@ -3,7 +3,7 @@
 
 :root {
     --primary: rgba(254, 44, 85, 1);
-    --text-color: #333;
+    --text-color: #rgb(22, 24, 35);
     --white: #fff;
     --primary-opacity-0: rgba(254, 44, 85, 0);
     --primary-opacity-4: rgba(254, 44, 85, 0.04);
@@ -30,12 +30,14 @@ body {
     font-size: 1.6rem;
     line-height: 1.5;
     text-rendering: optimizespeed;
+    color: var(--text-color);
 }
 
 input,
 button {
     outline: none;
     border: none;
+    font-family: ibm-plex-sans, sans-serif;
 }
 
 a[href] {
