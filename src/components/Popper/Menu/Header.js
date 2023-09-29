@@ -1,5 +1,7 @@
 import classNames from "classnames/bind";
 import styles from './Menu.module.scss'
+import PropTypes from 'prop-types'
+
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 
@@ -14,6 +16,11 @@ function Header({ title, onBack }) {
             <h4 className={cx('header-title')}>{title}</h4>
         </header>
     );
+}
+
+Header.propTypes = {
+    title: PropTypes.string,
+    onBack: PropTypes.func
 }
 
 export default Header;

@@ -2,11 +2,13 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    overflow-y: overlay;
 }
 
 .container {
     display: flex;
     width: var(--default-layout-width);
+    margin-top: var(--default-layout-height);
     padding: 0 24px;
 }
 
