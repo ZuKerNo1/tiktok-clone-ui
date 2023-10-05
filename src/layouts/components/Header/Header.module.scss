@@ -14,10 +14,14 @@
 .inner {
     display: flex;
     align-items: center;
-    padding: 0 24px;
     justify-content: space-between;
+    padding: 0 24px;
     height: 100%;
-    width: var(--default-layout-width);
+    width: 100%;
+}
+
+.logo {
+    min-width: 300px;
 }
 
 .action {

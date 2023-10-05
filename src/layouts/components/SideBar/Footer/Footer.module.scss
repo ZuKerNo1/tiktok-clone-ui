@@ -1,0 +1,26 @@
+.wrapper {
+    padding-left: 8px;
+    margin-bottom: 8px;
+}
+
+.copy-right,
+.title {
+    color: rgba(22, 24, 35, 0.5);
+    font-weight: 600;
+    font-size: 12px;
+    line-height: 16px;
+    display: inline-block;
+    margin-right: 6px;
+    margin-top: 5px;
+}
+
+.title {
+    &:hover {
+        text-decoration: underline;
+        cursor: pointer;
+    }
+}
+
+.copy-right {
+    display: block;
+}

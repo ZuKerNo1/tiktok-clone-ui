@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 
 import styles from './DefaultLayout.module.scss'
 import Header from "~/layouts/components/Header";
-import SideBar from "./SideBar";
+import SideBar from "~/layouts/components/SideBar";
 
 const cx = classNames.bind(styles)
 
