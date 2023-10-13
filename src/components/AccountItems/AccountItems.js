@@ -9,28 +9,29 @@ import Image from "~/components/Image";
 
 const cx = classNames.bind(styles)
 
-function AccountItems({ data }) {
+function AccountItems({ account }) {
+    
     return (
 
-        <Link to={`/@${data.nickname}`} className={cx('wrapper')}>
+        <Link to={`/@${account.nickname}`} className={cx('wrapper')}>
             <Image
                 className={cx('avatar')}
-                src={data.avatar}
-                alt={data.full_name}
+                src={account.avatar}
+                alt={account.full_name}
             />
             <div className={cx('info')}>
                 <h4 className={cx('name')}>
-                    <span>{data.full_name}</span>
-                    {data.tick && <FontAwesomeIcon icon={faCheckCircle} className={cx('check')} />}
+                    <span>{account.full_name}</span>
+                    {account.tick && <FontAwesomeIcon icon={faCheckCircle} className={cx('check')} />}
                 </h4>
-                <span className={cx('username')}>{data.nickname}</span>
+                <span className={cx('username')}>{account.nickname}</span>
             </div>
         </Link>
     )
 }
 
 AccountItems.propTypes = {
-    data: PropTypes.object.isRequired,
+    account: PropTypes.object.isRequired,
 }
 
 export default AccountItems;

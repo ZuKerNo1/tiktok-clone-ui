@@ -77,7 +77,7 @@ function SideBar() {
                     <MenuItem title="LIVE" to={routes.live} icon={<LIVEIcon />} activeIcon={<LIVEIconActive />} />
                 </Menu>
 
-                <SuggestedAccounts label="Suggested accounts" data={suggestedUser} onSeeMore={handleSeeMoreBtn} />
+                <SuggestedAccounts label="Suggested accounts" accounts={suggestedUser} onSeeMore={handleSeeMoreBtn} />
 
                 <Footer data={FooterLink} />
             </aside>

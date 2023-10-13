@@ -6,13 +6,13 @@ import styles from './SuggestedAccounts.module.scss'
 
 const cx = classNames.bind(styles);
 
-function SuggestedAccounts({ label, data = [], onSeeMore }) {
+function SuggestedAccounts({ label, accounts = [], onSeeMore }) {
     return (
         <div className={cx('wrapper')}>
             <h2 className={cx('label')}>{label}</h2>
 
-            {data.map((account) => (
-                <AccountItem key={account.id} data={account} />
+            {accounts.map((account) => (
+                <AccountItem key={account.id} account={account} />
             ))}
 
             <p className={cx('more-btn')} onClick={onSeeMore}>See more</p>
@@ -22,7 +22,7 @@ function SuggestedAccounts({ label, data = [], onSeeMore }) {
 
 SuggestedAccounts.propTypes = {
     label: PropTypes.string.isRequired,
-    data: PropTypes.array,
+    accounts: PropTypes.array,
     onSeeMore: PropTypes.func
 }
 
