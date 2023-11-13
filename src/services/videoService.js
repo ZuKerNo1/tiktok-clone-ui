@@ -5,7 +5,7 @@ export const getVideoList = async (type = 'for-you', page) => {
         const res = await httpRequest.get('videos', {
             params: {
                 type: type,
-                page,
+                page: page,
             },
         });
         return res.data;

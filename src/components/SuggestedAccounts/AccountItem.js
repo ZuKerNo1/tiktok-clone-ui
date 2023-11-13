@@ -1,12 +1,12 @@
-import classNames from "classnames/bind";
-import { Link } from "react-router-dom";
-import PropTypes from 'prop-types'
+import classNames from 'classnames/bind';
+import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
-import styles from './SuggestedAccounts.module.scss'
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCheckCircle } from "@fortawesome/free-solid-svg-icons";
+import styles from './SuggestedAccounts.module.scss';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCheckCircle } from '@fortawesome/free-solid-svg-icons';
 
-const cx = classNames.bind(styles)
+const cx = classNames.bind(styles);
 
 function AccountItem({ account }) {
     return (
@@ -17,17 +17,16 @@ function AccountItem({ account }) {
                     <p className={cx('nickname')}>{account.nickname}</p>
                     {account.tick && <FontAwesomeIcon className={cx('check')} icon={faCheckCircle} />}
                 </div>
-                <p className={cx('name')}>{account.first_name} {account.last_name}</p>
-
+                <p className={cx('name')}>
+                    {account.first_name} {account.last_name}
+                </p>
             </div>
-
         </Link>
-
     );
 }
 
 AccountItem.propTypes = {
-    account: PropTypes.object.isRequired
-}
+    account: PropTypes.object.isRequired,
+};
 
 export default AccountItem;

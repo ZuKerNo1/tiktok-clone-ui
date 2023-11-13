@@ -1,53 +1,75 @@
-import classNames from "classnames/bind";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCommentDots, faHeart, faMusic, faShare, faTag } from "@fortawesome/free-solid-svg-icons";
-import { forwardRef, useEffect, useState, useRef } from "react";
-import PropTypes from 'prop-types'
+import classNames from 'classnames/bind';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCommentDots, faHeart, faMusic, faShare, faTag } from '@fortawesome/free-solid-svg-icons';
+import { forwardRef, useEffect, useState, useRef } from 'react';
+import PropTypes from 'prop-types';
 
-import styles from './Video.module.scss'
-import Button from "../Button";
-import { MutedIcon, PauseIcon, PlayIcon, VolumeIcon } from "../Icons";
-import Image from "../Image";
+import styles from './Video.module.scss';
+import Button from '../Button';
+import { MutedIcon, PauseIcon, PlayIcon, VolumeIcon } from '../Icons';
+import Image from '../Image';
 const cx = classNames.bind(styles);
 
-function VideoItem({ item }) {
-    const videoRef = useRef()
-    const user = item.user
+function VideoItem({ item, volumeRender, onChangeVolume }) {
+    const videoRef = useRef();
 
-    const [volume, setVolume] = useState(50)
+    const user = item.user;
 
-    const [play, setPlay] = useState(false)
-    const [muted, setMuted] = useState(false)
+    const [play, setPlay] = useState(false);
+    const [muted, setMuted] = useState(false);
 
+    // Xử lí chạy/tắt video
     const handlePlay = () => {
         if (!play) {
             videoRef.current.play();
-            setPlay(true)
+            setPlay(true);
         } else {
             videoRef.current.pause();
-            setPlay(false)
-        }
-    }
-
-    const handleVolumeChange = (event) => {
-        const newVolume = event.target.value;
-        setVolume(newVolume);
-        if (videoRef.current) {
-            videoRef.current.volume = newVolume / 100;
+            setPlay(false);
         }
     };
 
-    useEffect(() => {
-        if (videoRef && videoRef.current) {
-            if (videoRef.current.volume !== 0) {
-                setMuted(false);
-            } else {
-                setMuted(true);
-            }
+    // Thay đổi âm lượng video
+    const handleVolumeChange = (event) => {
+        const newVolume = event.target.value;
+        if (videoRef.current) {
+            videoRef.current.volume = newVolume / 100;
         }
-    }, [videoRef]);
+        onChangeVolume(newVolume);
+    };
 
+    // Chạy video khi ở trong view port
+    const handleScroll = () => {
+        const rect = videoRef.current.getBoundingClientRect(); //Lấy thông tin kích thước phần tử
+        const isVisible = rect.top < window.innerHeight / 2 && rect.bottom >= window.innerHeight / 2; //Kiểm tra phần tử có hiển thị trên screen
 
+        if (isVisible) {
+            videoRef.current.play();
+            setPlay(true);
+        } else {
+            videoRef.current.pause();
+            setPlay(false);
+        }
+    };
+
+    // const handleMuted = () => {
+    //     videoRef.current.muted = !videoRef.current.muted;
+    // };
+
+    useEffect(() => {
+        window.addEventListener('scroll', handleScroll);
+
+        videoRef.current.volume = volumeRender / 100;
+        if (videoRef.current.volume !== 0) {
+            setMuted(false);
+        } else {
+            setMuted(true);
+        }
+
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+        };
+    }, [volumeRender]);
 
     return (
         <div className={cx('wrapper')}>
@@ -56,7 +78,9 @@ function VideoItem({ item }) {
                 <div className={cx('info')}>
                     <div className={cx('auther')}>
                         <p className={cx('nickname')}>{user.nickname}</p>
-                        <p className={cx('name')}>{user.first_name} {user.last_name}</p>
+                        <p className={cx('name')}>
+                            {user.first_name} {user.last_name}
+                        </p>
                     </div>
                     <p className={cx('description')}>{item.description}</p>
                     <div className={cx('music-tag')}>
@@ -71,7 +95,6 @@ function VideoItem({ item }) {
 
                 <div className={cx('video-wrapper')}>
                     <div className={cx('video-card')}>
-
                         <video loop ref={videoRef} className={cx('video')} src={item.file_url} />
 
                         <div className={cx('play-icon')} onClick={handlePlay}>
@@ -81,12 +104,12 @@ function VideoItem({ item }) {
                             {/* Test volume */}
                             <div className={cx('volume-control')}>
                                 <div className={cx('volume-bar')}>
-                                    <div className={cx('volume-dot')} style={{ height: `${volume}%` }}></div>
+                                    <div className={cx('volume-dot')} style={{ height: `${volumeRender}%` }}></div>
                                 </div>
                                 <input
                                     className={cx('volume-input')}
                                     type="range"
-                                    value={volume}
+                                    value={volumeRender}
                                     step="1"
                                     min="0"
                                     max="100"
@@ -100,10 +123,9 @@ function VideoItem({ item }) {
                             ) : (
                                 <div>
                                     <MutedIcon />
-                                </div>)}
+                                </div>
+                            )}
                         </div>
-
-
                     </div>
 
                     {/* Action Item */}
@@ -140,8 +162,7 @@ function VideoItem({ item }) {
 }
 
 VideoItem.propTypes = {
-    ref: PropTypes.node.isRequired,
-    video: PropTypes.object.isRequired
-}
+    item: PropTypes.object.isRequired,
+};
 
 export default forwardRef(VideoItem);

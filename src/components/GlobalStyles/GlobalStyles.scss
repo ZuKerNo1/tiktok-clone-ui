@@ -13,6 +13,7 @@
     --default-layout-height: 60px;
     --default-layout-width: 1150px;
     --search-button-width: 52px;
+    --sidebar-width: 240px;
 }
 
 * {
@@ -36,7 +37,7 @@ body {
 
 html *::-webkit-scrollbar {
     border-radius: 0;
-    width: 8px;
+    width: 0;
 }
 
 html *::-webkit-scrollbar-thumb {

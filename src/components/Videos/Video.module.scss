@@ -85,7 +85,8 @@
 
 .video-card {
     position: relative;
-    height: calc(450px + (100vw - 768px) / 1152 * 200);
+    height: 580px;
+    width: 320px;
     cursor: pointer;
     margin-right: 20px;
 }
