@@ -1,31 +1,31 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from 'react';
 import { faCircleXmark, faSpinner } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import HeadlessTippy from "@tippyjs/react/headless";
-import classNames from "classnames/bind";
-import styles from './Search.module.scss'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import HeadlessTippy from '@tippyjs/react/headless';
+import classNames from 'classnames/bind';
+import styles from './Search.module.scss';
 
 import * as searchServices from '~/services/searchService';
-import { Wrapper as PopperWrapper } from "~/components/Popper";
-import AccountItems from "~/components/AccountItems";
-import { SearchIcon } from "~/components/Icons";
-import { useDebounce } from "~/hooks";
+import { Wrapper as PopperWrapper } from '~/components/Popper';
+import AccountItems from '~/components/AccountItems';
+import { SearchIcon } from '~/components/Icons';
+import { useDebounce } from '~/hooks';
 
-const cx = classNames.bind(styles)
+const cx = classNames.bind(styles);
 
 function Search() {
-    const [searchResult, setSearchResult] = useState([1])
-    const [searchValue, setSearchValue] = useState('')
-    const [showResult, setShowResult] = useState(false)
-    const [loading, setLoading] = useState(false)
+    const [searchResult, setSearchResult] = useState([1]);
+    const [searchValue, setSearchValue] = useState('');
+    const [showResult, setShowResult] = useState(false);
+    const [loading, setLoading] = useState(false);
 
-    const debounced = useDebounce(searchValue, 800)
+    const debounced = useDebounce(searchValue, 800);
 
-    const inputRef = useRef()
+    const inputRef = useRef();
 
     useEffect(() => {
         if (!debounced) {
-            setSearchResult([])
+            setSearchResult([]);
             return;
         }
 
@@ -38,25 +38,25 @@ function Search() {
             setLoading(false);
         };
         fetchApi();
-
-    }, [debounced])
+    }, [debounced]);
 
     const handleClear = () => {
         setSearchValue('');
-        setSearchResult([])
+        setSearchResult([]);
         inputRef.current.focus();
-    }
+    };
 
     const handleShowResult = () => {
-        setShowResult(false)
-    }
+        setShowResult(false);
+    };
     return (
         <div>
             <HeadlessTippy
+                placement="bottom"
                 offset={[0]}
                 interactive
                 visible={showResult && searchResult.length > 0}
-                render={attrs => (
+                render={(attrs) => (
                     <div className={cx('search-result')} tabIndex="-1" {...attrs}>
                         <PopperWrapper>
                             <h4 className={cx('search-title')}>Tài khoản</h4>
@@ -74,19 +74,19 @@ function Search() {
                         value={searchValue}
                         placeholder="Tìm kiếm"
                         spellCheck={false}
-                        onChange={e => {
-                            e.target.value = e.target.value.trimStart()
-                            setSearchValue(e.target.value)
+                        onChange={(e) => {
+                            e.target.value = e.target.value.trimStart();
+                            setSearchValue(e.target.value);
                         }}
                         onFocus={() => setShowResult(true)}
                     />
-                    {!!searchValue && !loading && (<button
-                        onClick={handleClear}
-                    >
-                        <FontAwesomeIcon className={cx('clear')} icon={faCircleXmark} />
-                    </button>)}
+                    {!!searchValue && !loading && (
+                        <button onClick={handleClear}>
+                            <FontAwesomeIcon className={cx('clear')} icon={faCircleXmark} />
+                        </button>
+                    )}
                     {loading && <FontAwesomeIcon className={cx('loading')} icon={faSpinner} />}
-                    <button className={cx('search-btn')} onMouseDown={e => e.preventDefault()}>
+                    <button className={cx('search-btn')} onMouseDown={(e) => e.preventDefault()}>
                         <SearchIcon />
                     </button>
                 </div>

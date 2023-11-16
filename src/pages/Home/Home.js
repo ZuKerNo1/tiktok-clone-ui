@@ -7,26 +7,30 @@ import * as videoService from '~/services/videoService';
 
 const cx = classNames.bind(styles);
 
-// const INIT_TYPE = 'for-you';
+const INIT_TYPE = 'for-you';
 
 function Home() {
     const [video, setVideo] = useState([]);
-    // const [page, setPage] = useState(5);
+    const [page, setPage] = useState(1);
 
     useEffect(() => {
         videoService
-            .getVideoList()
+            .getVideoList(INIT_TYPE, page)
             .then((data) => {
                 setVideo((prevVideo) => [...prevVideo, ...data]);
             })
             .catch((error) => {
                 console.log(error);
             });
-    }, []);
+    }, [page]);
+
+    const handleScroll = (pageIndex) => {
+        setPage(pageIndex);
+    };
 
     return (
         <div className={cx('wrapper')}>
-            <Video videos={video} />
+            <Video videos={video} addPageScroll={handleScroll} page={page} />
         </div>
     );
 }

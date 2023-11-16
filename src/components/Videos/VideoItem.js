@@ -15,17 +15,17 @@ function VideoItem({ item, volumeRender, onChangeVolume }) {
 
     const user = item.user;
 
-    const [play, setPlay] = useState(false);
-    const [muted, setMuted] = useState(false);
+    const [playing, setPlaying] = useState(false);
+    const [muted, setMuted] = useState(true);
 
     // Xử lí chạy/tắt video
     const handlePlay = () => {
-        if (!play) {
+        if (!playing) {
             videoRef.current.play();
-            setPlay(true);
+            setPlaying(true);
         } else {
             videoRef.current.pause();
-            setPlay(false);
+            setPlaying(false);
         }
     };
 
@@ -38,6 +38,10 @@ function VideoItem({ item, volumeRender, onChangeVolume }) {
         onChangeVolume(newVolume);
     };
 
+    const handleMuted = () => {
+        setMuted(!muted);
+    };
+
     // Chạy video khi ở trong view port
     const handleScroll = () => {
         const rect = videoRef.current.getBoundingClientRect(); //Lấy thông tin kích thước phần tử
@@ -45,31 +49,37 @@ function VideoItem({ item, volumeRender, onChangeVolume }) {
 
         if (isVisible) {
             videoRef.current.play();
-            setPlay(true);
+            setPlaying(true);
         } else {
             videoRef.current.pause();
-            setPlay(false);
+            setPlaying(false);
         }
     };
 
-    // const handleMuted = () => {
-    //     videoRef.current.muted = !videoRef.current.muted;
-    // };
-
+    //Xử lý khi nhấn tắt âm lượng
     useEffect(() => {
-        window.addEventListener('scroll', handleScroll);
+        videoRef.current.muted = muted;
+    }, [muted]);
 
+    // Xử lý khi kéo âm lượng
+    useEffect(() => {
         videoRef.current.volume = volumeRender / 100;
+
         if (videoRef.current.volume !== 0) {
             setMuted(false);
         } else {
             setMuted(true);
         }
+    }, [volumeRender]);
+
+    // Xử lý khi cuộn trình duyệt
+    useEffect(() => {
+        window.addEventListener('scroll', handleScroll);
 
         return () => {
             window.removeEventListener('scroll', handleScroll);
         };
-    }, [volumeRender]);
+    }, []);
 
     return (
         <div className={cx('wrapper')}>
@@ -83,10 +93,14 @@ function VideoItem({ item, volumeRender, onChangeVolume }) {
                         </p>
                     </div>
                     <p className={cx('description')}>{item.description}</p>
-                    <div className={cx('music-tag')}>
-                        <FontAwesomeIcon icon={faMusic} />
-                        <p className={cx('link-music')}>nhạc nền - Kiều Boss</p>
-                    </div>
+                    {user.music ? (
+                        <div className={cx('music-tag')}>
+                            <FontAwesomeIcon icon={faMusic} />
+                            <p className={cx('link-music')}>nhạc nền - Kiều Boss</p>
+                        </div>
+                    ) : (
+                        <></>
+                    )}
                     {/* <div className={cx('anchor-tag')}>
                         <FontAwesomeIcon icon={faLocationDot} />
                         <p className={cx('name-location')}>Sầm Sơn</p>
@@ -98,13 +112,16 @@ function VideoItem({ item, volumeRender, onChangeVolume }) {
                         <video loop ref={videoRef} className={cx('video')} src={item.file_url} />
 
                         <div className={cx('play-icon')} onClick={handlePlay}>
-                            {!play ? <PlayIcon /> : <PauseIcon />}
+                            {!playing ? <PlayIcon /> : <PauseIcon />}
                         </div>
                         <div className={cx('volume-icon')}>
                             {/* Test volume */}
                             <div className={cx('volume-control')}>
                                 <div className={cx('volume-bar')}>
-                                    <div className={cx('volume-dot')} style={{ height: `${volumeRender}%` }}></div>
+                                    <div
+                                        className={cx('volume-dot')}
+                                        style={{ height: `${muted ? 0 : volumeRender}%` }}
+                                    ></div>
                                 </div>
                                 <input
                                     className={cx('volume-input')}
@@ -116,15 +133,17 @@ function VideoItem({ item, volumeRender, onChangeVolume }) {
                                     onChange={handleVolumeChange}
                                 />
                             </div>
-                            {!muted ? (
-                                <div>
-                                    <VolumeIcon />
-                                </div>
-                            ) : (
-                                <div>
-                                    <MutedIcon />
-                                </div>
-                            )}
+                            <div onClick={() => handleMuted()}>
+                                {muted ? (
+                                    <div>
+                                        <MutedIcon />
+                                    </div>
+                                ) : (
+                                    <div>
+                                        <VolumeIcon />
+                                    </div>
+                                )}
+                            </div>
                         </div>
                     </div>
 
